@@ -7,5 +7,21 @@ package lyf.litespring.bean;
  * @Modified By:
  */
 public interface BeanDefinition {
+    String SCOPE_DEFAULT = "singleton";
+    String SCOPE_PROTOTYPE = "prototype";
+
+    /**
+     * 获取Bean类名
+     * @return
+     */
     String getBeanClassName();
+
+    boolean isSingleton();
+
+    boolean isPrototype();
+
+    String getScope();
+
+    void setScope(String scope);
+
 }

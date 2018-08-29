@@ -10,7 +10,11 @@ import lyf.litespring.bean.BeanDefinition;
  */
 public interface BeanFactory {
 
-    BeanDefinition getBeanDefinition(String beanId);
-
+    /**
+     *
+     * @param beanId
+     * @return
+     */
     Object getBean(String beanId);
+
 }

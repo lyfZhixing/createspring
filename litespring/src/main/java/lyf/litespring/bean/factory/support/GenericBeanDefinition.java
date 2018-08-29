@@ -4,7 +4,7 @@ import lyf.litespring.bean.BeanDefinition;
 
 /**
  * @Author: liyufeng
- * @Description:
+ * @Description: 存取Bean的属性
  * @Date: Created in 上午11:15 18-8-21
  * @Modified By:
  */

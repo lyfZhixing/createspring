@@ -1,13 +1,18 @@
 package lyf.litespring.test.v1;
 
 import lyf.litespring.bean.BeanDefinition;
-import lyf.litespring.bean.factory.BeanFactory;
 import lyf.litespring.bean.factory.support.DefaultBeanFactory;
+import lyf.litespring.bean.factory.xml.XmlBeanDefinitionReader;
+import lyf.litespring.core.io.ClassPathResource;
+import lyf.litespring.core.io.Resource;
 import lyf.litespring.test.service.v1.PetStoreService;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @Author: liyufeng
@@ -16,18 +21,39 @@ import static org.junit.Assert.assertNotNull;
  * @Modified By:
  */
 public class BeanFactoryTest {
+    DefaultBeanFactory factory = null;
+    XmlBeanDefinitionReader xmlBeanDefinitionReader = null;
+
+    @Before
+    public void setUp() {
+        factory = new DefaultBeanFactory();
+        xmlBeanDefinitionReader = new XmlBeanDefinitionReader(factory);
+    }
 
     @Test
     public void testGetBean() {
 
-        //1.解析xml
-        BeanFactory beanFactory = new DefaultBeanFactory("petstore-v1.xml");
-        //1.1 根据id获取bean的属性，类名……
-        BeanDefinition beanDefinition = beanFactory.getBeanDefinition("petStore");
+        Resource resource = new ClassPathResource("petstore-v1.xml");
+
+        xmlBeanDefinitionReader.loadBeanDefinitions(resource);
+
+        BeanDefinition beanDefinition = factory.getBeanDefinition("petStore");
+
+        assertTrue(beanDefinition.isSingleton());
+
+        assertFalse(beanDefinition.isPrototype());
+
+        assertEquals(BeanDefinition.SCOPE_DEFAULT, beanDefinition.getScope());
+
         assertEquals("lyf.litespring.test.service.v1.PetStoreService",beanDefinition.getBeanClassName());
-        //2.获取bean的实例对象
-        PetStoreService petStoreService = (PetStoreService)beanFactory.getBean("petStore");
+
+        PetStoreService petStoreService = (PetStoreService) factory.getBean("petStore");
+
         assertNotNull(petStoreService);
+
+        PetStoreService petStoreService1 = (PetStoreService) factory.getBean("petStore");
+
+        assertTrue(petStoreService.equals(petStoreService1));
 
     }
 }
